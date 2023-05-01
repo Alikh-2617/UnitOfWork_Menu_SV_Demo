@@ -1,4 +1,5 @@
-﻿using DAL.Doman.Contracts;
+﻿using AutoMapper;
+using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -9,13 +10,15 @@ namespace MenuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DessertController : ControllerBase  // med Auto Mapper mappning 
+    public class DessertController : ControllerBase  // med Auto Mapper mappning  paket Auto mapper , lägga till i program.cs
     {
         private IUnitOfWork _context;
+        private IMapper _mapper;
 
-        public DessertController(IUnitOfWork unitOfWork)
+        public DessertController(IUnitOfWork unitOfWork , IMapper mapper)
         {
             _context = unitOfWork;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -38,17 +41,10 @@ namespace MenuAPI.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(GenericVM dessertVM)
         {
-            string objekt = dessertVM.ToString()!;
-            GenericVM dessert = JsonConvert.DeserializeObject<GenericVM>(objekt!)!;   
-            if(dessert != null)
+            if(ModelState.IsValid)
             {
-                Dessert dessertToCreate = new Dessert();
-                dessertToCreate.Id = Guid.NewGuid();
-                dessertToCreate.Name = dessert.Name;
-                dessertToCreate.Description = dessert.Description;
-                dessertToCreate.Create = DateTime.Now;
-                if(dessert.Day != null) { dessertToCreate.Day = dessert.Day; }
-                await _context.Dessert.insert(dessertToCreate);
+                var dessert = _mapper.Map<Dessert>(dessertVM);
+                await _context.Dessert.insert(dessert);
                 await _context.save();
                 return Ok();
             }
@@ -70,21 +66,16 @@ namespace MenuAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Dessert dessert)
         {
-            string objekt = dessert.ToString()!;
-            Dessert objektToUpdate = JsonConvert.DeserializeObject<Dessert>(objekt)!;
-            var dessertInDatabase = await _context.Dessert.Find(objektToUpdate.Id);
-            if(dessertInDatabase != null)
+            if(ModelState.IsValid)
             {
-                Dessert dessertSave = new Dessert();
-                dessertSave.Id = objektToUpdate.Id;
-                dessertSave.Name = objektToUpdate.Name;
-                dessertSave.Description = objektToUpdate.Description;
-                dessertSave.Create = objektToUpdate.Create;
-                dessertSave.Update = DateTime.Now;
-                if(objektToUpdate.Day != null) { dessertSave.Day =  objektToUpdate.Day; }
-                _context.Dessert.Update(dessertSave);
-                await _context.save();
-                return Ok();
+                var dessertInDatabase = await _context.Dessert.Find(dessert.Id);
+                if(dessertInDatabase != null)
+                {
+                    var dessertToSave = _mapper.Map<Dessert>(dessert);
+                    _context.Dessert.Update(dessertToSave);
+                    await _context.save();
+                    return Ok();
+                }
             }
             return BadRequest();
         }

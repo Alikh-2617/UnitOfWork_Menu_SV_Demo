@@ -1,4 +1,5 @@
-﻿using DAL.Doman.Contracts;
+﻿using AutoMapper;
+using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -12,10 +13,12 @@ namespace MenuAPI.Controllers
     public class DinnerController : ControllerBase // med implicit operator mappning in i View model class
     {
         private IUnitOfWork _context;
+        private IMapper _mapper;
 
-        public DinnerController(IUnitOfWork unitOfWork)
+        public DinnerController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _context = unitOfWork;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -24,23 +27,32 @@ namespace MenuAPI.Controllers
             return Ok(dinners);
         }
         [HttpPost("create")]
-        public async Task<IActionResult> Create(GenericVM dinner)
+        public async Task<IActionResult> Create(GenericVM food)
         {
-            string objekt = dinner.ToString()!;
-            GenericVM objektToCreate = JsonConvert.DeserializeObject<GenericVM>(objekt)!;
-            if(objektToCreate != null)
+            if(ModelState.IsValid)
             {
-                Dinner dinnerToCreate = new Dinner();
-                dinnerToCreate.Id = Guid.NewGuid();
-                dinnerToCreate.Name = objektToCreate.Name;
-                dinnerToCreate.Discription = objektToCreate.Description;
-                dinnerToCreate.Created = DateTime.Now;
-                if(objektToCreate.Day != null) { dinnerToCreate.Day = objektToCreate.Day; }
+                var dinnerToCreate = _mapper.Map<Dinner>(food);
                 await _context.Dinner.insert(dinnerToCreate);
                 await _context.save();
                 return Ok();
             }
             return BadRequest();
+
+            //string objekt = dinner.ToString()!;
+            //GenericVM objektToCreate = JsonConvert.DeserializeObject<GenericVM>(objekt)!;
+            //if(objektToCreate != null)
+            //{
+            //    Dinner dinnerToCreate = new Dinner();
+            //    dinnerToCreate.Id = Guid.NewGuid();
+            //    dinnerToCreate.Name = objektToCreate.Name;
+            //    dinnerToCreate.Discription = objektToCreate.Description;
+            //    dinnerToCreate.Created = DateTime.Now;
+            //    if(objektToCreate.Day != null) { dinnerToCreate.Day = objektToCreate.Day; }
+            //    await _context.Dinner.insert(dinnerToCreate);
+            //    await _context.save();
+            //    return Ok();
+            //}
+            //return BadRequest();
         }
         [HttpGet("getById")]
         public IActionResult GetDinner(Guid id)
