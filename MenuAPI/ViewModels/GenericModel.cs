@@ -2,10 +2,11 @@
 
 namespace MenuAPI.ViewModels
 {
-    public class GenericVM
+    public class GenericModel
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Discription { get; set; }
         public DateTime Create { get; set; }
         public DateTime? Update { get; set; }
         public string? Day { get; set; }

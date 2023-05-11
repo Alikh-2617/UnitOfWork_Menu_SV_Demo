@@ -11,6 +11,6 @@ namespace DAL.Doman.Models.Category
         public string Description { get; set; }
         public DateTime Create { get; set; }
         public DateTime? Update { get; set; }
-        public DaysMenu? Day { get; set; }
+        public string? Day { get; set; }
     }
 }

@@ -1,13 +1,17 @@
 using DAL.AppDbContext;
 using DAL.Doman.Contracts;
 using DAL.Implementation.Categorys;
+using MenuAPI.FilterConfiguration.GlobalFilters;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new GlobalFilter()); // Add Global Filter !
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);    // Automapper config and paket måste install

@@ -10,5 +10,6 @@ namespace DAL.Doman.Contracts
 {
     public interface ILunch: IGenericRepository<Lunch>
     {
+        Task<IEnumerable<Lunch>> DayMenu(string day);
     }
 }

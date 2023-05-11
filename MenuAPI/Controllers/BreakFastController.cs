@@ -24,6 +24,8 @@ namespace MenuAPI.Controllers
             var breateFast = await _context.BreakFast.GetAll();
             return Ok(breateFast);
         }
+
+
         [HttpPost("create")]
         public async Task<IActionResult> Create(GenericVM breakFast)
         {

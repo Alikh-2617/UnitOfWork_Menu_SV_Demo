@@ -10,6 +10,6 @@ namespace DAL.Doman.Models.Category
         public string Discription { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Update { get; set; }
-        public DaysMenu? Day { get; set; }
+        public string? Day { get; set; }
     }
 }

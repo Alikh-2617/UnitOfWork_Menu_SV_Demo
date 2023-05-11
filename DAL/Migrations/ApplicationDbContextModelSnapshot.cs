@@ -31,8 +31,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("Create")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Day1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Day")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -47,19 +47,16 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Day1");
-
                     b.ToTable("BreakFasts");
-                });
 
-            modelBuilder.Entity("DAL.Doman.Models.Category.DaysMenu", b =>
-                {
-                    b.Property<string>("Day")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Day");
-
-                    b.ToTable("DaysMenu");
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7dd9f4ab-7200-45fb-8c2d-aa6b48bb2932"),
+                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3942),
+                            Description = "ssss",
+                            Name = "sssss"
+                        });
                 });
 
             modelBuilder.Entity("DAL.Doman.Models.Category.Dessert", b =>
@@ -71,8 +68,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("Create")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Day1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Day")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -87,9 +84,16 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Day1");
-
                     b.ToTable("Desserts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("584bc7ec-551a-432c-9903-0ea7607dabc2"),
+                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3958),
+                            Description = "ssss",
+                            Name = "sssss"
+                        });
                 });
 
             modelBuilder.Entity("DAL.Doman.Models.Category.Dinner", b =>
@@ -101,8 +105,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Day1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Day")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discription")
                         .IsRequired()
@@ -117,15 +121,13 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Day1");
-
                     b.ToTable("Dinner");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("21671386-f42a-4642-9e48-add0ab44f363"),
-                            Created = new DateTime(2023, 4, 27, 14, 17, 20, 935, DateTimeKind.Local).AddTicks(2206),
+                            Id = new Guid("8440829d-ab09-4746-9e41-a44bf90d39ab"),
+                            Created = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3768),
                             Discription = " ssss",
                             Name = "dd"
                         });
@@ -137,9 +139,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DaysMenuDay")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -150,9 +149,15 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DaysMenuDay");
-
                     b.ToTable("Drinks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("451cb4b3-4a25-4902-a5ad-2622afb1d09d"),
+                            Name = "sssss",
+                            Size = "10"
+                        });
                 });
 
             modelBuilder.Entity("DAL.Doman.Models.Category.Lunch", b =>
@@ -164,8 +169,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("Create")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Day1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Day")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discription")
                         .IsRequired()
@@ -180,15 +185,13 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Day1");
-
                     b.ToTable("Lunch");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c8c0ccbb-fc6f-4466-abaa-0a497b9c0e62"),
-                            Create = new DateTime(2023, 4, 27, 14, 17, 20, 935, DateTimeKind.Local).AddTicks(2380),
+                            Id = new Guid("d8d698e1-a0c0-4966-8d32-0d583caa2c0b"),
+                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3913),
                             Discription = "ssss",
                             Name = "sssss"
                         });
@@ -200,9 +203,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DaysMenuDay")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -213,74 +213,15 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DaysMenuDay");
-
                     b.ToTable("Sodas");
-                });
 
-            modelBuilder.Entity("DAL.Doman.Models.Category.BreakFast", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", "Day")
-                        .WithMany("BreakFasts")
-                        .HasForeignKey("Day1");
-
-                    b.Navigation("Day");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.Dessert", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", "Day")
-                        .WithMany("Desserts")
-                        .HasForeignKey("Day1");
-
-                    b.Navigation("Day");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.Dinner", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", "Day")
-                        .WithMany("Dinners")
-                        .HasForeignKey("Day1");
-
-                    b.Navigation("Day");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.Drink", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", null)
-                        .WithMany("Drinks")
-                        .HasForeignKey("DaysMenuDay");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.Lunch", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", "Day")
-                        .WithMany("Lunches")
-                        .HasForeignKey("Day1");
-
-                    b.Navigation("Day");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.Soda", b =>
-                {
-                    b.HasOne("DAL.Doman.Models.Category.DaysMenu", null)
-                        .WithMany("Sodas")
-                        .HasForeignKey("DaysMenuDay");
-                });
-
-            modelBuilder.Entity("DAL.Doman.Models.Category.DaysMenu", b =>
-                {
-                    b.Navigation("BreakFasts");
-
-                    b.Navigation("Desserts");
-
-                    b.Navigation("Dinners");
-
-                    b.Navigation("Drinks");
-
-                    b.Navigation("Lunches");
-
-                    b.Navigation("Sodas");
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6e1ac0d7-32d0-45a9-b039-7f92c358800e"),
+                            Name = "sssss",
+                            Size = "10"
+                        });
                 });
 #pragma warning restore 612, 618
         }

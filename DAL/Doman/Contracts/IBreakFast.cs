@@ -10,5 +10,7 @@ namespace DAL.Doman.Contracts
 {
     public interface IBreakFast: IGenericRepository<BreakFast>
     {
+        Task<IEnumerable<BreakFast>> DayMenu(string day);
     }
+
 }

@@ -14,7 +14,6 @@ namespace DAL.Doman.Contracts
         IDrink Drink { get; }
         ILunch Lunch { get; }
         ISoda Soda { get; }
-        //IDaysMenu Menu { get; }
         Task save();   
     }
 }

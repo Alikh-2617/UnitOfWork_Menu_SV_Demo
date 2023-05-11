@@ -12,17 +12,6 @@ namespace DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DaysMenu",
-                columns: table => new
-                {
-                    Day = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DaysMenu", x => x.Day);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BreakFasts",
                 columns: table => new
                 {
@@ -31,16 +20,11 @@ namespace DAL.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Create = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Update = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Day1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Day = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BreakFasts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BreakFasts_DaysMenu_Day1",
-                        column: x => x.Day1,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.CreateTable(
@@ -52,16 +36,11 @@ namespace DAL.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Create = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Update = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Day1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Day = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Desserts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Desserts_DaysMenu_Day1",
-                        column: x => x.Day1,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.CreateTable(
@@ -73,16 +52,11 @@ namespace DAL.Migrations
                     Discription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Update = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Day1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Day = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dinner", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Dinner_DaysMenu_Day1",
-                        column: x => x.Day1,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.CreateTable(
@@ -91,17 +65,11 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DaysMenuDay = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Drinks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Drinks_DaysMenu_DaysMenuDay",
-                        column: x => x.DaysMenuDay,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.CreateTable(
@@ -113,16 +81,11 @@ namespace DAL.Migrations
                     Discription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Create = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Update = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Day1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Day = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lunch", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Lunch_DaysMenu_Day1",
-                        column: x => x.Day1,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.CreateTable(
@@ -131,58 +94,42 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DaysMenuDay = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sodas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sodas_DaysMenu_DaysMenuDay",
-                        column: x => x.DaysMenuDay,
-                        principalTable: "DaysMenu",
-                        principalColumn: "Day");
                 });
 
             migrationBuilder.InsertData(
+                table: "BreakFasts",
+                columns: new[] { "Id", "Create", "Day", "Description", "Name", "Update" },
+                values: new object[] { new Guid("7dd9f4ab-7200-45fb-8c2d-aa6b48bb2932"), new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3942), null, "ssss", "sssss", null });
+
+            migrationBuilder.InsertData(
+                table: "Desserts",
+                columns: new[] { "Id", "Create", "Day", "Description", "Name", "Update" },
+                values: new object[] { new Guid("584bc7ec-551a-432c-9903-0ea7607dabc2"), new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3958), null, "ssss", "sssss", null });
+
+            migrationBuilder.InsertData(
                 table: "Dinner",
-                columns: new[] { "Id", "Created", "Day1", "Discription", "Name", "Update" },
-                values: new object[] { new Guid("21671386-f42a-4642-9e48-add0ab44f363"), new DateTime(2023, 4, 27, 14, 17, 20, 935, DateTimeKind.Local).AddTicks(2206), null, " ssss", "dd", null });
+                columns: new[] { "Id", "Created", "Day", "Discription", "Name", "Update" },
+                values: new object[] { new Guid("8440829d-ab09-4746-9e41-a44bf90d39ab"), new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3768), null, " ssss", "dd", null });
+
+            migrationBuilder.InsertData(
+                table: "Drinks",
+                columns: new[] { "Id", "Name", "Size" },
+                values: new object[] { new Guid("451cb4b3-4a25-4902-a5ad-2622afb1d09d"), "sssss", "10" });
 
             migrationBuilder.InsertData(
                 table: "Lunch",
-                columns: new[] { "Id", "Create", "Day1", "Discription", "Name", "Update" },
-                values: new object[] { new Guid("c8c0ccbb-fc6f-4466-abaa-0a497b9c0e62"), new DateTime(2023, 4, 27, 14, 17, 20, 935, DateTimeKind.Local).AddTicks(2380), null, "ssss", "sssss", null });
+                columns: new[] { "Id", "Create", "Day", "Discription", "Name", "Update" },
+                values: new object[] { new Guid("d8d698e1-a0c0-4966-8d32-0d583caa2c0b"), new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3913), null, "ssss", "sssss", null });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_BreakFasts_Day1",
-                table: "BreakFasts",
-                column: "Day1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Desserts_Day1",
-                table: "Desserts",
-                column: "Day1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Dinner_Day1",
-                table: "Dinner",
-                column: "Day1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Drinks_DaysMenuDay",
-                table: "Drinks",
-                column: "DaysMenuDay");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lunch_Day1",
-                table: "Lunch",
-                column: "Day1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sodas_DaysMenuDay",
+            migrationBuilder.InsertData(
                 table: "Sodas",
-                column: "DaysMenuDay");
+                columns: new[] { "Id", "Name", "Size" },
+                values: new object[] { new Guid("6e1ac0d7-32d0-45a9-b039-7f92c358800e"), "sssss", "10" });
         }
 
         /// <inheritdoc />
@@ -205,9 +152,6 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sodas");
-
-            migrationBuilder.DropTable(
-                name: "DaysMenu");
         }
     }
 }

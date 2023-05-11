@@ -8,8 +8,8 @@ namespace MenuAPI.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<GenericVM, Dessert>();
-            //CreateMap<GenericVM, Dinner>();
+            CreateMap<GenericVM, GenericModel>().ForMember(x => x.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
+                                            //.ForMember(y => y.Update, ops => ops.MapFrom(dd => DateTime.Now));
         }
     }
 }

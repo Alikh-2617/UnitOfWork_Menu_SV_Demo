@@ -37,8 +37,6 @@ namespace DAL.Implementation.Categorys
 
         public ISoda Soda {get; private set;}
 
-        //public IDaysMenu Menu { get; private set;}
-
         public void Dispose() => _context.Dispose();    
 
         public Task save() => _context.SaveChangesAsync();

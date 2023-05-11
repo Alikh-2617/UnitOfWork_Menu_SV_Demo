@@ -1,6 +1,7 @@
 ﻿using DAL.AppDbContext;
 using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace DAL.Implementation.Categorys
         public LunchService(ApplicationDbContext context) : base(context)
         {
         }
+
+        public async Task<IEnumerable<Lunch>> DayMenu(string day) => await _context.Lunch.Where(x=>x.Day == day).ToListAsync();
     }
 }

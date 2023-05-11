@@ -1,16 +1,18 @@
 ﻿using AutoMapper;
 using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
+using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 
 namespace MenuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DinnerController : ControllerBase // med implicit operator mappning in i View model class
+    public class DinnerController : ControllerBase //using IMapp 
     {
         private IUnitOfWork _context;
         private IMapper _mapper;
@@ -20,7 +22,10 @@ namespace MenuAPI.Controllers
             _context = unitOfWork;
             _mapper = mapper;
         }
+
         [HttpGet]
+        [ActionFilterAttribut("somting")]
+
         public async Task<IActionResult> Get()
         {
             var dinners = await _context.Dinner.GetAll();
@@ -37,22 +42,6 @@ namespace MenuAPI.Controllers
                 return Ok();
             }
             return BadRequest();
-
-            //string objekt = dinner.ToString()!;
-            //GenericVM objektToCreate = JsonConvert.DeserializeObject<GenericVM>(objekt)!;
-            //if(objektToCreate != null)
-            //{
-            //    Dinner dinnerToCreate = new Dinner();
-            //    dinnerToCreate.Id = Guid.NewGuid();
-            //    dinnerToCreate.Name = objektToCreate.Name;
-            //    dinnerToCreate.Discription = objektToCreate.Description;
-            //    dinnerToCreate.Created = DateTime.Now;
-            //    if(objektToCreate.Day != null) { dinnerToCreate.Day = objektToCreate.Day; }
-            //    await _context.Dinner.insert(dinnerToCreate);
-            //    await _context.save();
-            //    return Ok();
-            //}
-            //return BadRequest();
         }
         [HttpGet("getById")]
         public IActionResult GetDinner(Guid id)
@@ -84,13 +73,8 @@ namespace MenuAPI.Controllers
             var dinnerInDatabase = await _context.Dinner.Find(objektToUpdate.Id);
             if(dinnerInDatabase != null)
             {
-                Dinner dinnerSave = new Dinner();
-                dinnerSave.Id = objektToUpdate.Id;
-                dinnerSave.Name = objektToUpdate.Name;
-                dinnerSave.Discription = objektToUpdate.Discription;
-                dinnerSave.Created = objektToUpdate.Created;
+                Dinner dinnerSave = _mapper.Map<Dinner>(objektToUpdate);
                 dinnerSave.Update = DateTime.Now;
-                if(objektToUpdate.Day != null) { dinnerSave.Day =  objektToUpdate.Day; }
                 _context.Dinner.Update(dinnerSave);
                 await _context.save();
 
