@@ -40,7 +40,7 @@ namespace DAL.AppDbContext
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Dinner>().HasData(new Dinner { Id = Guid.NewGuid(), Discription = " ssss", Name = "dd", Created = DateTime.Now });
-            modelBuilder.Entity<Lunch>().HasData(new Lunch { Id = Guid.NewGuid(), Name = "sssss", Discription = "ssss", Create = DateTime.Now });
+            modelBuilder.Entity<Lunch>().HasData(new Lunch { Id = Guid.NewGuid(), Name = "sssss", Description = "ssss", Create = DateTime.Now });
             modelBuilder.Entity<BreakFast>().HasData(new BreakFast { Id = Guid.NewGuid(), Name = "sssss", Description = "ssss", Create = DateTime.Now });
             modelBuilder.Entity<Dessert>().HasData(new Dessert { Id = Guid.NewGuid(), Name = "sssss", Description = "ssss", Create = DateTime.Now });
             modelBuilder.Entity<Drink>().HasData(new Drink { Id = Guid.NewGuid(), Name = "sssss",Size = "10"});

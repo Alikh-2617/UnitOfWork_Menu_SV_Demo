@@ -12,50 +12,66 @@ namespace MenuAPI.Controllers
     [ApiController]
     public class DessertController : ControllerBase  // med Auto Mapper mappning  paket Auto mapper , lägga till i program.cs
     {
-        private IUnitOfWork _context;
-        private IMapper _mapper;
+        private readonly IUnitOfWork _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<DessertController> _logger;
 
-        public DessertController(IUnitOfWork unitOfWork , IMapper mapper)
+        public DessertController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<DessertController> logger)
         {
             _context = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var dessert = await _context.Dessert.GetAll();
-            return Ok(dessert);
+            if (dessert.Any())
+            {
+                return Ok(dessert);
+            }
+            return NotFound();
         }
-        [HttpGet("{getById}")]
+
+
+
+        [HttpGet("GetById")]
         public async Task<IActionResult> GetDessert(Guid id)
         {
             var dessert = await _context.Dessert.Find(id);
-            if(dessert != null) 
+            if (dessert != null)
             {
-                return Ok(dessert); 
+                return Ok(dessert);
             }
-            return NotFound();  
+            return NotFound();
         }
 
-
-        [HttpPost("create")]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(GenericVM dessertVM)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var dessert = _mapper.Map<Dessert>(dessertVM);
-                await _context.Dessert.insert(dessert);
-                await _context.save();
-                return Ok();
+                try
+                {
+                    var dessert = _mapper.Map<Dessert>(dessertVM);
+                    await _context.Dessert.insert(dessert);
+                    await _context.save();
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return NotFound("Object can not insert !");
+                    _logger.LogWarning($"{ex.Message}");
+                }
             }
             return BadRequest();
         }
 
-        [HttpPost("deleteById")]
+        [HttpPost("DeleteById")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var objekt = await _context.Dessert.Find(id);
-            if(objekt != null)
+            if (objekt != null)
             {
                 _context.Dessert.Delete(objekt);
                 await _context.save();
@@ -63,18 +79,23 @@ namespace MenuAPI.Controllers
             }
             return NotFound();
         }
+
         [HttpPut]
-        public async Task<IActionResult> Update(Dessert dessert)
+        public async Task<IActionResult> Update(Dessert dessert) // can use like (Guid id , GenericVM food) 
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var dessertInDatabase = await _context.Dessert.Find(dessert.Id);
-                if(dessertInDatabase != null)
+                try
                 {
-                    var dessertToSave = _mapper.Map<Dessert>(dessert);
-                    _context.Dessert.Update(dessertToSave);
+                    dessert.Update = DateTime.Now;
+                    _context.Dessert.Update(dessert);
                     await _context.save();
                     return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return NotFound("Object can not update !");
+                    _logger.LogWarning($"{ex.Message}");
                 }
             }
             return BadRequest();

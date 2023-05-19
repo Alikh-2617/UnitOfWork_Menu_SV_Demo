@@ -4,46 +4,61 @@ using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace MenuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LunchController : ControllerBase
+    public class LunchController : ControllerBase  // using JsonConvert.DeserializeObject and direct mapping in controller
     {
         private readonly IUnitOfWork _context;
+        private readonly ILogger<LunchController> _logger;
 
-        public LunchController(IUnitOfWork context)
+        public LunchController(IUnitOfWork context , ILogger<LunchController> logger )
         {
             _context = context;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var luches =await _context.Lunch.GetAll();
-            return Ok(luches);
+            if (luches.Any())
+            {
+                return Ok(luches);
+            }
+            return NotFound();
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create(GenericVM lunch)
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(JsonObject _lunch)
         {
-            string objekt = lunch.ToString()!;
-            GenericVM objektToCreate = JsonConvert.DeserializeObject<GenericVM>(objekt!)!;
-            if (objektToCreate != null)
+            try
             {
-                Lunch lunchToCreate = new Lunch();
-                lunchToCreate.Id = Guid.NewGuid();
-                lunchToCreate.Name = objektToCreate.Name;
-                lunchToCreate.Discription = objektToCreate.Description;
-                lunchToCreate.Create = DateTime.Now;
-                if (objektToCreate.Day != null) { lunchToCreate.Day = objektToCreate.Day; }
-                await _context.Lunch.insert(lunchToCreate);
-                await _context.save();
-                return Ok();
+                string Jsonobjekt = _lunch.ToString()!;
+                GenericVM objekt = JsonConvert.DeserializeObject<GenericVM>(Jsonobjekt)!;
+                if (objekt != null)
+                {
+                    Lunch lunch = new Lunch();
+                    lunch.Id = Guid.NewGuid();
+                    lunch.Name = objekt.Name;
+                    lunch.Description = objekt.Description;
+                    lunch.Create = DateTime.Now;
+                    lunch.Day = objekt?.Day;
+                    await _context.Lunch.insert(lunch);
+                    await _context.save();
+                    return Ok();
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest("Object can not Create !");
+                _logger.LogWarning($"{ex.Message}");
+            }
         }
-        [HttpGet("{GetByid}")]
+        [HttpGet("GetByid")]
         public async Task<IActionResult> GetLunch(Guid id)
         { 
             var lunch = await _context.Lunch.Find(id);
@@ -52,14 +67,14 @@ namespace MenuAPI.Controllers
                 Lunch lunch1 = new Lunch();
                 lunch1.Id = lunch.Id;
                 lunch1.Name = lunch.Name;
-                lunch1.Discription = lunch.Discription;
+                lunch1.Description = lunch.Description;
                 lunch1.Create = DateTime.Now;
                 lunch1.Update = lunch.Update;
                 return Ok(lunch1);
             }
             return NotFound();
         }
-        [HttpPost("{deleteById}")]
+        [HttpPost("DeleteById")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var lunch =await _context.Lunch.Find(id);
@@ -72,24 +87,32 @@ namespace MenuAPI.Controllers
             return NotFound();
         }
         [HttpPut]
-        public async Task<IActionResult> Update(Lunch lunch)
+        public async Task<IActionResult> Update(JsonObject lunch)  // can use like (Guid id , GenericVM food) 
         {
-            string objekt = lunch.ToString()!;
-            Lunch objektToUpdate = JsonConvert.DeserializeObject<Lunch>(objekt!)!;
-            var lunchInDatabase =await _context.Lunch.Find(objektToUpdate.Id);
-            if (lunchInDatabase != null)
+            try
             {
-                Lunch lunchSave = new Lunch();  
-                lunchSave.Id = lunchInDatabase.Id;
-                lunchSave.Name = lunchInDatabase.Name;
-                lunchSave.Discription = lunchInDatabase.Discription;
-                lunchSave.Create = lunchInDatabase.Create;
-                lunchSave.Update = DateTime.Now;
-                if(lunchInDatabase.Day != null) { lunchSave.Day = lunchInDatabase.Day; }
-                _context.Lunch.Update(lunchSave);
-                return Ok();
+                string objekt = lunch.ToString()!;
+                Lunch objektToUpdate = JsonConvert.DeserializeObject<Lunch>(objekt!)!;
+                if (objektToUpdate != null)
+                {
+                    Lunch lunchSave = new Lunch();
+                    lunchSave.Id = objektToUpdate.Id;
+                    lunchSave.Name = objektToUpdate.Name;
+                    lunchSave.Description = objektToUpdate.Description;
+                    lunchSave.Create = objektToUpdate.Create;
+                    lunchSave.Update = DateTime.Now;
+                    lunchSave.Day = objektToUpdate?.Day;
+                    _context.Lunch.Update(lunchSave);
+                    await _context.save();
+                    return Ok();
+                }
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest("Object can not update !");
+                _logger.LogWarning($"{ex.Message}");
+            }
         }
     }
 }

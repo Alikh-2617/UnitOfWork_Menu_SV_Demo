@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using DAL.AppDbContext;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MenuAPI.FilterConfiguration.GlobalFilters
 {
@@ -9,7 +10,7 @@ namespace MenuAPI.FilterConfiguration.GlobalFilters
         // before Action Or Controller Executing
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            Console.WriteLine("Before Action executing");
+            Console.WriteLine("chekede cleam or something els");
         }
 
         // after Action Or Controller Executing

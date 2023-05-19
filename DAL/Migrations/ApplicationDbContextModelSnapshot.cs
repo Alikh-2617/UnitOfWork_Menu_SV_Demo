@@ -52,8 +52,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7dd9f4ab-7200-45fb-8c2d-aa6b48bb2932"),
-                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3942),
+                            Id = new Guid("7af782a6-6438-4ff7-a937-100284e85dbc"),
+                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3218),
                             Description = "ssss",
                             Name = "sssss"
                         });
@@ -89,8 +89,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("584bc7ec-551a-432c-9903-0ea7607dabc2"),
-                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3958),
+                            Id = new Guid("85f05a5c-7806-4e22-a148-5392e3db8e1f"),
+                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3233),
                             Description = "ssss",
                             Name = "sssss"
                         });
@@ -126,8 +126,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8440829d-ab09-4746-9e41-a44bf90d39ab"),
-                            Created = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3768),
+                            Id = new Guid("87f9365e-06d4-47d5-88e1-e3c40050e1ec"),
+                            Created = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3044),
                             Discription = " ssss",
                             Name = "dd"
                         });
@@ -154,7 +154,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("451cb4b3-4a25-4902-a5ad-2622afb1d09d"),
+                            Id = new Guid("413dd321-f897-4d31-aa28-4bf8137e8291"),
                             Name = "sssss",
                             Size = "10"
                         });
@@ -172,7 +172,7 @@ namespace DAL.Migrations
                     b.Property<string>("Day")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -190,9 +190,9 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d8d698e1-a0c0-4966-8d32-0d583caa2c0b"),
-                            Create = new DateTime(2023, 5, 11, 14, 43, 54, 996, DateTimeKind.Local).AddTicks(3913),
-                            Discription = "ssss",
+                            Id = new Guid("d4278dd2-b675-4dde-bd07-a6b10ca6eed2"),
+                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3198),
+                            Description = "ssss",
                             Name = "sssss"
                         });
                 });
@@ -218,7 +218,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6e1ac0d7-32d0-45a9-b039-7f92c358800e"),
+                            Id = new Guid("85155d52-e441-4123-8083-6bb86f2e8610"),
                             Name = "sssss",
                             Size = "10"
                         });

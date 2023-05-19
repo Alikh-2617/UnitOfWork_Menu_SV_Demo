@@ -12,42 +12,62 @@ namespace MenuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DinnerController : ControllerBase //using IMapp 
+    public class DinnerController : ControllerBase // use direct service
     {
-        private IUnitOfWork _context;
-        private IMapper _mapper;
+        private readonly IUnitOfWork _context;
+        private readonly ILogger<DinnerController> _logger;
 
-        public DinnerController(IUnitOfWork unitOfWork, IMapper mapper)
+        public DinnerController(IUnitOfWork unitOfWork , ILogger<DinnerController> logger)
         {
             _context = unitOfWork;
-            _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
-        [ActionFilterAttribut("somting")]
+        [ActionFilterAttribut]
 
         public async Task<IActionResult> Get()
         {
             var dinners = await _context.Dinner.GetAll();
-            return Ok(dinners);
+            if (dinners.Any())
+            {
+                return Ok(dinners);
+            }
+            return NotFound();
         }
-        [HttpPost("create")]
+
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(GenericVM food)
         {
-            if(ModelState.IsValid)
+            try
             {
-                var dinnerToCreate = _mapper.Map<Dinner>(food);
-                await _context.Dinner.insert(dinnerToCreate);
-                await _context.save();
-                return Ok();
+                if (ModelState.IsValid)
+                {
+                    Dinner _dinner = new Dinner();
+                    _dinner.Id = Guid.NewGuid();
+                    _dinner.Name = food.Name;
+                    _dinner.Discription = food.Description;
+                    _dinner.Created = DateTime.UtcNow;
+                    _dinner.Day = food.Day ?? string.Empty;
+                    await _context.Dinner.insert(_dinner);
+                    await _context.save();
+                    return Ok();
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest("Object can not Create!");
+                _logger.LogWarning($"{ex.Message}");
+            }
         }
-        [HttpGet("getById")]
-        public IActionResult GetDinner(Guid id)
+
+
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetDinner(Guid id)
         {
-            var dinner = _context.Dinner.Find(id);
-            if(dinner != null)
+            var dinner =await _context.Dinner.Find(id);
+            if (dinner != null)
             {
                 return Ok(dinner);
             }
@@ -58,28 +78,33 @@ namespace MenuAPI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var dinner = await _context.Dinner.Find(id);
-            if(dinner != null)
+            if (dinner != null)
             {
                 _context.Dinner.Delete(dinner);
                 return Ok();
             }
             return NotFound();
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(Dinner dinner) 
-        {
-            string objekt = dinner.ToString()!;
-            Dinner objektToUpdate = JsonConvert.DeserializeObject<Dinner>(objekt)!;
-            var dinnerInDatabase = await _context.Dinner.Find(objektToUpdate.Id);
-            if(dinnerInDatabase != null)
-            {
-                Dinner dinnerSave = _mapper.Map<Dinner>(objektToUpdate);
-                dinnerSave.Update = DateTime.Now;
-                _context.Dinner.Update(dinnerSave);
-                await _context.save();
 
+        [HttpPut]
+        public async Task<IActionResult> Update(Dinner dinner)  // can use like (Guid id , GenericVM food) 
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    dinner.Update = DateTime.Now;
+                    _context.Dinner.Update(dinner);
+                    await _context.save();
+                    return Ok();
+                }
+                return BadRequest();
             }
-            return BadRequest();        
+            catch(Exception ex)
+            {
+                return BadRequest("Object can not Update!");
+                _logger.LogWarning($"{ex.Message}");
+            }
         }
 
     }

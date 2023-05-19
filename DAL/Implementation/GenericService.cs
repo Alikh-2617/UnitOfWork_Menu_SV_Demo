@@ -26,7 +26,9 @@ namespace DAL.Implementation
 
         public async Task insert(T entity)=> await _context.Set<T>().AddAsync(entity);
 
-        public void Update(T entity) =>  _context.Set<T>().Entry(entity).State = EntityState.Modified;
-        
+        public void Update(T entity) => _context.Set<T>().Entry(entity).State = EntityState.Modified;
+
+
+
     }
 }
