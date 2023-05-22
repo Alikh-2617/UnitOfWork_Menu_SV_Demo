@@ -1,4 +1,5 @@
 ﻿using DAL.AppDbContext;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MenuAPI.FilterConfiguration.GlobalFilters
@@ -7,16 +8,21 @@ namespace MenuAPI.FilterConfiguration.GlobalFilters
     {
         // this filter have to inject in program.cs in Add.Controller  and didnt writh över controller or Actions . Just it
 
-        // before Action Or Controller Executing
+        List<string> ips = new List<string>();
+
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            Console.WriteLine("chekede cleam or something els");
+            var clientIp = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+            var clientLocalIp = context.HttpContext.Connection.LocalIpAddress?.ToString() ?? string.Empty;
+            var locaPort = context.HttpContext.Connection.LocalPort.ToString();
+
+            ips.Add($"IP : {clientIp}>> Local Ip = {clientLocalIp} >> Local port : {locaPort}");
+            //context.Result = new BadRequestObjectResult($"ip = {clientIp} : Local Ip = {clientLocalIp}: port = {locaPort} ");
+            //return;
         }
 
-        // after Action Or Controller Executing
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Console.WriteLine("Before Action executing");
         }
     }
 }
