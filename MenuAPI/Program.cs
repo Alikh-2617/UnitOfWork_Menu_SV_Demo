@@ -1,6 +1,8 @@
 using DAL.AppDbContext;
 using DAL.Doman.Contracts;
+using DAL.Doman.Models.Category;
 using DAL.Implementation.Categorys;
+using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.FilterConfiguration.GlobalFilters;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);    // Automapper config and paket måste install
+builder.Services.AddScoped(typeof(ValidationActionFilterAttribut<>));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

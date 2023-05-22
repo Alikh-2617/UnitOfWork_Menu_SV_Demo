@@ -1,5 +1,6 @@
 ﻿using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
+using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,24 @@ namespace MenuAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("GetByid")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Lunch>))]
+        public IActionResult GetLunch(Guid id)
+        {
+            var lunch = HttpContext.Items["entity"] as Lunch;
+            return Ok(lunch);
+        }
+
+        [HttpPost("DeleteById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Lunch>))]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var lunch = HttpContext.Items["entity"] as Lunch;
+            _context.Lunch.Delete(lunch);
+            await _context.save();
+            return Ok();
+        }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(JsonObject _lunch)
         {
@@ -58,34 +77,7 @@ namespace MenuAPI.Controllers
                 _logger.LogWarning($"{ex.Message}");
             }
         }
-        [HttpGet("GetByid")]
-        public async Task<IActionResult> GetLunch(Guid id)
-        { 
-            var lunch = await _context.Lunch.Find(id);
-            if (lunch != null)
-            {
-                Lunch lunch1 = new Lunch();
-                lunch1.Id = lunch.Id;
-                lunch1.Name = lunch.Name;
-                lunch1.Description = lunch.Description;
-                lunch1.Create = DateTime.Now;
-                lunch1.Update = lunch.Update;
-                return Ok(lunch1);
-            }
-            return NotFound();
-        }
-        [HttpPost("DeleteById")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var lunch =await _context.Lunch.Find(id);
-            if (lunch != null)
-            {
-                _context.Lunch.Delete(lunch);
-                await _context.save();
-                return Ok();
-            }
-            return NotFound();
-        }
+
         [HttpPut]
         public async Task<IActionResult> Update(JsonObject lunch)  // can use like (Guid id , GenericVM food) 
         {

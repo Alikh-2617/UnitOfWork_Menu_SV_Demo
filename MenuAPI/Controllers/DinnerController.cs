@@ -16,16 +16,16 @@ namespace MenuAPI.Controllers
     {
         private readonly IUnitOfWork _context;
         private readonly ILogger<DinnerController> _logger;
+        private readonly IMapper _mapper;
 
-        public DinnerController(IUnitOfWork unitOfWork , ILogger<DinnerController> logger)
+        public DinnerController(IUnitOfWork unitOfWork, ILogger<DinnerController> logger, IMapper mapper)
         {
             _context = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        [ActionFilterAttribut]
-
         public async Task<IActionResult> Get()
         {
             var dinners = await _context.Dinner.GetAll();
@@ -36,74 +36,56 @@ namespace MenuAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("GetById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Dinner>))]
+        public IActionResult GetDinner(Guid id)
+        {
+            var dinner = HttpContext.Items["entity"] as Dinner;
+            return Ok(dinner);
+        }
+
+        [HttpPost("DeleteById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Dinner>))]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var dessert = HttpContext.Items["entity"] as Dinner;
+            _context.Dinner.Delete(dessert!);
+            await _context.save();
+            return Ok();
+        }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(GenericVM food)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    Dinner _dinner = new Dinner();
-                    _dinner.Id = Guid.NewGuid();
-                    _dinner.Name = food.Name;
-                    _dinner.Discription = food.Description;
-                    _dinner.Created = DateTime.UtcNow;
-                    _dinner.Day = food.Day ?? string.Empty;
-                    await _context.Dinner.insert(_dinner);
-                    await _context.save();
-                    return Ok();
-                }
-                return BadRequest();
+                var dinner = _mapper.Map<Dinner>(food);
+                await _context.Dinner.insert(dinner);
+                await _context.save();
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Object can not Create!");
                 _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Object can not Create!");
             }
         }
 
-
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetDinner(Guid id)
-        {
-            var dinner =await _context.Dinner.Find(id);
-            if (dinner != null)
-            {
-                return Ok(dinner);
-            }
-            return NotFound();
-        }
-
-        [HttpPost("DeleteById")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var dinner = await _context.Dinner.Find(id);
-            if (dinner != null)
-            {
-                _context.Dinner.Delete(dinner);
-                return Ok();
-            }
-            return NotFound();
-        }
 
         [HttpPut]
         public async Task<IActionResult> Update(Dinner dinner)  // can use like (Guid id , GenericVM food) 
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    dinner.Update = DateTime.Now;
-                    _context.Dinner.Update(dinner);
-                    await _context.save();
-                    return Ok();
-                }
-                return BadRequest();
+                dinner.Update = DateTime.Now;
+                _context.Dinner.Update(dinner);
+                await _context.save();
+                return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest("Object can not Update!");
                 _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Object can not Update!");
             }
         }
 

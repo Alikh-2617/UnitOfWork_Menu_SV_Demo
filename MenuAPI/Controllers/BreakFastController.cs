@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
+using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +16,19 @@ namespace MenuAPI.Controllers
     {
         private readonly IUnitOfWork _context;
         private readonly ILogger<BreakFastController> _logger;
+        private readonly IMapper _mapper;
 
-        public BreakFastController(IUnitOfWork unitOfWork, ILogger<BreakFastController> logger )
+        public BreakFastController(IUnitOfWork unitOfWork, ILogger<BreakFastController> logger, IMapper mapper)
         {
             _context = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var breateFast = await _context.BreakFast.GetAll();
-            if(breateFast.Any())
+            if (breateFast.Any())
             {
                 return Ok(breateFast);
             }
@@ -40,48 +43,34 @@ namespace MenuAPI.Controllers
             {
                 string objekt = breakFast.ToString()!;
                 GenericVM objektToCreate = JsonConvert.DeserializeObject<GenericVM>(objekt)!;
-                if (objektToCreate != null)
-                {
-                    BreakFast breakFastToCreate = new BreakFast();
-                    breakFastToCreate.Id = Guid.NewGuid();
-                    breakFastToCreate.Name = objektToCreate.Name;
-                    breakFastToCreate.Description = objektToCreate.Description;
-                    breakFastToCreate.Create = DateTime.Now;
-                    breakFastToCreate.Day = objektToCreate?.Day; 
-                    await _context.BreakFast.insert(breakFastToCreate);
-                    await _context.save();
-                    return Ok();
-                }
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Object can not insert !");
-                _logger.LogWarning($"{ex.Message}");
-            }
-        }
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetBreakFast(Guid id)
-        {
-            var breakFast = await _context.BreakFast.Find(id);
-            if (breakFast != null)
-            {
-                return Ok(breakFast);
-            }
-            return NotFound();
-        }
-
-        [HttpPost("DeleteById")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var breaFast = await _context.BreakFast.Find(id);
-            if (breaFast != null)
-            {
-                _context.BreakFast.Delete(breaFast);
+                var BF = _mapper.Map<BreakFast>(breakFast);  // exampel 
+                await _context.BreakFast.insert(BF);
                 await _context.save();
                 return Ok();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Object can not insert !");
+            }
+        }
+        [HttpGet("GetById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<BreakFast>))]
+        public IActionResult GetBreakFast(Guid id)
+        {
+            var breakfast = HttpContext.Items["entity"] as BreakFast;
+            return Ok(breakfast);
+        }
+
+        [HttpPost("DeleteById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<BreakFast>))]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var breaFast = HttpContext.Items["entity"] as BreakFast;
+            _context.BreakFast.Delete(breaFast!);
+            await _context.save();
+            return Ok();
+
         }
         [HttpPut]
         public async Task<IActionResult> Update(JsonObject breakFast)
@@ -89,27 +78,16 @@ namespace MenuAPI.Controllers
             try
             {
                 string objekt = breakFast.ToString()!;
-                BreakFast objektToUpdate = JsonConvert.DeserializeObject<BreakFast>(objekt)!;
-                if (objektToUpdate != null)
-                {
-                    BreakFast breakFastSave = new BreakFast();
-                    breakFastSave.Id = objektToUpdate.Id;
-                    breakFastSave.Name = objektToUpdate.Name;
-                    breakFastSave.Description = objektToUpdate.Description;
-                    breakFastSave.Create = objektToUpdate.Create;
-                    breakFastSave.Update = DateTime.Now;
-                    if (objektToUpdate.Day != null) { breakFastSave.Day = objektToUpdate.Day; }
-                    _context.BreakFast.Update(breakFastSave);
-                    await _context.save();
-                    return Ok();
-
-                }
-                return BadRequest();
+                BreakFast BF = JsonConvert.DeserializeObject<BreakFast>(objekt)!;
+                BF.Update = DateTime.Now;
+                _context.BreakFast.Update(BF);
+                await _context.save();
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Onject can not update !");
                 _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Object can not update !");
             }
         }
 

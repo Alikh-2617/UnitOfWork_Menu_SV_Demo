@@ -1,9 +1,12 @@
-﻿using DAL.Doman.Contracts;
+﻿using AutoMapper;
+using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
+using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace MenuAPI.Controllers
 {
@@ -13,12 +16,15 @@ namespace MenuAPI.Controllers
     {
         private readonly IUnitOfWork _context;
         private readonly ILogger<DrinkController> _logger;
+        private readonly IMapper _mapper;
 
-        public DrinkController(IUnitOfWork context , ILogger<DrinkController> logger)
+        public DrinkController(IUnitOfWork context, ILogger<DrinkController> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -30,80 +36,58 @@ namespace MenuAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("GetByid")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Drink>))]
+        public IActionResult Get(Guid id)
+        {
+            var drink = HttpContext.Items["entity"] as Drink;
+            return Ok(drink);
+        }
+
+        [HttpPost("DeleteById")]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<Drink>))]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var drink = HttpContext.Items["entity"] as Drink;
+            _context.Drink.Delete(drink!);
+            await _context.save();
+            return Ok();
+        }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(Drink_SodaVM drink)
         {
             try
             {
-                string objekt = drink.ToString()!;
-                Drink_SodaVM objektToCreate = JsonConvert.DeserializeObject<Drink_SodaVM>(objekt!)!;
-                if (objektToCreate != null)
-                {
-                    Drink drinkToCreate = new Drink();
-                    drinkToCreate.Id = Guid.NewGuid();
-                    drinkToCreate.Name = objektToCreate.Name;
-                    drinkToCreate.Size = objektToCreate.Size;
-                    await _context.Drink.insert(drinkToCreate);
-                    await _context.save();
-                    return Ok();
-                }
-                return BadRequest();
-            }
-            catch(Exception ex) 
-            {
-                return BadRequest("Onject can not Create");
-                _logger.LogWarning($"{ex.Message}");
-            }
-        }
-        [HttpGet("GetByid")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var drinkInDatabase = await _context.Drink.Find(id);
-            if (drinkInDatabase != null)
-            {
-                Drink drink = new Drink();
-                drink.Id = drinkInDatabase.Id;
-                drink.Name = drinkInDatabase.Name;
-                drink.Size = drinkInDatabase.Size;
-                return Ok(drink);
-            }
-            return NotFound();
-        }
-        [HttpPost("DeleteById")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var drink = await _context.Drink.Find(id);
-            if (drink != null)
-            {
-                _context.Drink.Delete(drink);
+                //string objekt = drink.ToString()!;
+                //Drink_SodaVM drinke = JsonConvert.DeserializeObject<Drink_SodaVM>(objekt)!;
+                var DF = _mapper.Map<Drink>(drink);
+                await _context.Drink.insert(DF);
                 await _context.save();
                 return Ok();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Onject can not Create");
+            }
         }
+
         [HttpPut]
         public async Task<IActionResult> Update(Drink drink)
         {
             try
             {
-                string objekt = drink.ToString()!;
-                Drink objektToUpdate = JsonConvert.DeserializeObject<Drink>(objekt!)!;
-                var drinkInDatabase = await _context.Lunch.Find(objektToUpdate.Id);
-                if (drinkInDatabase != null)
-                {
-                    Drink dringSave = new Drink();
-                    dringSave.Id = objektToUpdate.Id;
-                    dringSave.Name = objektToUpdate.Name;
-                    dringSave.Size = objektToUpdate.Size;
-                    _context.Drink.Update(dringSave);
-                    return Ok();
-                }
-                return NotFound();
+                //string objekt = drink.ToString()!;
+                //Drink objektToUpdate = JsonConvert.DeserializeObject<Drink>(objekt!)!;
+
+                _context.Drink.Update(drink);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Object can not Update .");
                 _logger.LogWarning($"{ex.Message}");
+                return BadRequest("Object can not Update .");
             }
         }
     }
