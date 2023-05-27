@@ -1,4 +1,5 @@
-﻿using DAL.Doman.Models.Category;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MenuAPI.ViewModels
 {

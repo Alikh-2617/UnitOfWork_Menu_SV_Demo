@@ -1,5 +1,6 @@
 ﻿using DAL.AppDbContext;
 using DAL.Doman.Contracts;
+using DAL.Doman.Models.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

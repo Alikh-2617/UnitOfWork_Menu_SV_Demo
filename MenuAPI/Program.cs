@@ -5,6 +5,7 @@ using DAL.Implementation.Categorys;
 using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.FilterConfiguration.GlobalFilters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);    // Automapper config and paket måste install
 builder.Services.AddScoped(typeof(ValidationActionFilterAttribut<>));
+builder.Services.AddScoped(typeof(ValidationModelAttribut<>));
+builder.Services.AddScoped(typeof(FileValidationAttribut));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -35,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 //app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
 app.MapControllers();

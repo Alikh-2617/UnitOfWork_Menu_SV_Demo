@@ -70,8 +70,8 @@ namespace MenuAPI.Controllers
             _context.BreakFast.Delete(breaFast!);
             await _context.save();
             return Ok();
-
         }
+
         [HttpPut]
         public async Task<IActionResult> Update(JsonObject breakFast)
         {

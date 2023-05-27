@@ -2,7 +2,7 @@
 
 namespace DAL.Doman.Models.Category
 {
-    public class BreakFast
+    public class BreakFast 
     {
         [Key]
         public Guid Id { get; set; }
