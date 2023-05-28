@@ -25,7 +25,7 @@ namespace MenuAPI.Controllers
         [ServiceFilter(typeof(FileValidationAttribut))]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            string[] allowForm = { "image/png", "image/jpeg", "image/gif" };
+            string[] allowForm =  { "image/png", "image/jpeg", "image/gif" };
             try
             {
                 if(allowForm.Contains(file.ContentType))
@@ -65,7 +65,7 @@ namespace MenuAPI.Controllers
                 byte[] pic = System.IO.File.ReadAllBytes(filePath);
                 return File(pic, "image/png");
             }
-            return NotFound();
+            return NotFound("Object has not any image !");
         }
     }
 }
