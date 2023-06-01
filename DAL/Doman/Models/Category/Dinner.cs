@@ -11,5 +11,8 @@ namespace DAL.Doman.Models.Category
         public DateTime Created { get; set; }
         public DateTime? Update { get; set; }
         public string? Day { get; set; }
+        public string? ImageName { get; set; }
+        //[NotMapped]
+        //public string ImageUrl { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace DAL.Doman.Repository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAll();
+        Task<List<TEntity>> GetAll();
         Task <TEntity?> Find(Guid id);
         Task insert(TEntity entity);
         void Delete(TEntity id);

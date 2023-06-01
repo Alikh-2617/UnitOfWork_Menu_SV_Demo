@@ -22,7 +22,7 @@ namespace DAL.Implementation
 
         public async Task<T?> Find(Guid id) => await _context.Set<T>().FindAsync(id);
 
-        public async Task<IEnumerable<T>> GetAll() =>await _context.Set<T>().ToListAsync();
+        public async Task<List<T>> GetAll() =>await _context.Set<T>().ToListAsync();
 
         public async Task insert(T entity)=> await _context.Set<T>().AddAsync(entity);
 

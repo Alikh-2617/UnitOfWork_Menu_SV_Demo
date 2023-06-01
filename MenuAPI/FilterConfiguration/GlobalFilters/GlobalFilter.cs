@@ -9,6 +9,7 @@ namespace MenuAPI.FilterConfiguration.GlobalFilters
         // this filter have to inject in program.cs in Add.Controller  and didnt writh över controller or Actions . Just it
 
         List<string> ips = new List<string>();
+        private int visitur = 0;   // den kan lagera i ett static file !!
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
@@ -19,10 +20,18 @@ namespace MenuAPI.FilterConfiguration.GlobalFilters
             ips.Add($"IP : {clientIp}>> Local Ip = {clientLocalIp} >> Local port : {locaPort}");
             //context.Result = new BadRequestObjectResult($"ip = {clientIp} : Local Ip = {clientLocalIp}: port = {locaPort} ");
             //return;
+
+            //if(visitur >= 100)
+            //{
+            //    context.Result = new BadRequestObjectResult("Its to much visitur visiting the site , you can try again about 10 minutes ! ");
+            //    return;
+            //}
+            //visitur++;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            //visitur--;
         }
     }
 }

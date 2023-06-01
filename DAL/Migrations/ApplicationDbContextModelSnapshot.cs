@@ -38,6 +38,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -52,8 +55,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7af782a6-6438-4ff7-a937-100284e85dbc"),
-                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3218),
+                            Id = new Guid("e187f2c3-c6d9-4c93-afe2-f1039f625b3d"),
+                            Create = new DateTime(2023, 5, 29, 13, 44, 53, 717, DateTimeKind.Local).AddTicks(1527),
                             Description = "ssss",
                             Name = "sssss"
                         });
@@ -75,6 +78,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -89,8 +95,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("85f05a5c-7806-4e22-a148-5392e3db8e1f"),
-                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3233),
+                            Id = new Guid("63c8f89f-01c5-4c72-8467-7f62cb1b3441"),
+                            Create = new DateTime(2023, 5, 29, 13, 44, 53, 717, DateTimeKind.Local).AddTicks(1544),
                             Description = "ssss",
                             Name = "sssss"
                         });
@@ -112,6 +118,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,8 +135,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("87f9365e-06d4-47d5-88e1-e3c40050e1ec"),
-                            Created = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3044),
+                            Id = new Guid("91d9f395-8338-4070-8671-548f8da6456b"),
+                            Created = new DateTime(2023, 5, 29, 13, 44, 53, 717, DateTimeKind.Local).AddTicks(1346),
                             Discription = " ssss",
                             Name = "dd"
                         });
@@ -138,6 +147,9 @@ namespace DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -154,7 +166,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("413dd321-f897-4d31-aa28-4bf8137e8291"),
+                            Id = new Guid("e1cb238d-0fa2-4f9c-b736-3124bdf12b99"),
                             Name = "sssss",
                             Size = "10"
                         });
@@ -176,6 +188,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -190,8 +205,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d4278dd2-b675-4dde-bd07-a6b10ca6eed2"),
-                            Create = new DateTime(2023, 5, 16, 17, 50, 39, 275, DateTimeKind.Local).AddTicks(3198),
+                            Id = new Guid("e9a70caf-7f30-4f5c-ab06-1f8972ad3b89"),
+                            Create = new DateTime(2023, 5, 29, 13, 44, 53, 717, DateTimeKind.Local).AddTicks(1508),
                             Description = "ssss",
                             Name = "sssss"
                         });
@@ -202,6 +217,9 @@ namespace DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -218,7 +236,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("85155d52-e441-4123-8083-6bb86f2e8610"),
+                            Id = new Guid("3b6539af-a259-496f-b0f0-8326a42bbab1"),
                             Name = "sssss",
                             Size = "10"
                         });

@@ -1,4 +1,5 @@
 ﻿using MenuAPI.FilterConfiguration.AttributFilters;
+using MenuAPI.Service;
 using MenuAPI.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,59 +13,35 @@ namespace MenuAPI.Controllers
     [ApiController]
     public class FileUploadController : ControllerBase
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<FileUploadController> _logger;
+        private readonly UploadService _service;
 
-        public FileUploadController(IWebHostEnvironment webHostEnvironment, ILogger<FileUploadController> logger)
+        public FileUploadController( ILogger<FileUploadController> logger , UploadService service)
         {
-            _webHostEnvironment = webHostEnvironment;
             _logger = logger;
+            _service = service;
         }
 
         [HttpPost("UploadFile")]
         [ServiceFilter(typeof(FileValidationAttribut))]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            string[] allowForm =  { "image/png", "image/jpeg", "image/gif" };
-            try
+            if(_service.upload(file, out string filename))
             {
-                if(allowForm.Contains(file.ContentType))
-                {
-                    string path = _webHostEnvironment.WebRootPath + "\\Pic\\";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    using (FileStream fileStream = System.IO.File.Create(path + file.FileName))
-                    {
-                        file.CopyTo(fileStream);
-                        fileStream.Flush();
-                        return Ok(file.FileName);
-                    }
-                }
-                else
-                {
-                    return BadRequest("File not support !");
-                }
+                return Ok(filename);
             }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex.Message, ex);
-                return BadRequest("Object can not upload !");
-            }
+            _logger.LogInformation("Something wrong with upload !");
+            return BadRequest("Object Can not upload !");
         }
-
 
         [HttpGet("GetFile")]
         public async Task<IActionResult> Get(string fileName)
         {
-            string path = _webHostEnvironment.WebRootPath + "\\Pic\\";
-            var filePath = path + fileName;
-            if (System.IO.File.Exists(filePath))
+            if(_service.download(fileName , out byte[] file))
             {
-                byte[] pic = System.IO.File.ReadAllBytes(filePath);
-                return File(pic, "image/png");
+                return File(file, "image/png");
             }
+            _logger.LogInformation("Something wrong with download !");
             return NotFound("Object has not any image !");
         }
     }

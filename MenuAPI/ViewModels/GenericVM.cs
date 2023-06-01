@@ -10,5 +10,8 @@ namespace MenuAPI.ViewModels
         public DateTime Create { get; set; }
         public DateTime? Update { get; set; }
         public string? Day { get; set; }
+        public int MyProperty { get; set; }
+        public string ImageName { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

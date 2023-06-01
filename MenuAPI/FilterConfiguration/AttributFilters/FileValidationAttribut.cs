@@ -18,7 +18,12 @@ namespace MenuAPI.FilterConfiguration.AttributFilters
                 return;
             }
             // try to validate the file is image from context ! 
-            
+            var file = (IFormFile)context.ActionArguments["file"]!;
+            if (!allowForm.Contains(file.ContentType))
+            {
+                context.Result = new BadRequestObjectResult("File not support !");
+                return;
+            }
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

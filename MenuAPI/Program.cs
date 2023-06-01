@@ -4,6 +4,7 @@ using DAL.Doman.Models.Category;
 using DAL.Implementation.Categorys;
 using MenuAPI.FilterConfiguration.AttributFilters;
 using MenuAPI.FilterConfiguration.GlobalFilters;
+using MenuAPI.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,10 +18,12 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();  // Add Cors to Access other app request to the host
 builder.Services.AddAutoMapper(typeof(Program).Assembly);    // Automapper config and paket måste install
 builder.Services.AddScoped(typeof(ValidationActionFilterAttribut<>));
 builder.Services.AddScoped(typeof(ValidationModelAttribut<>));
 builder.Services.AddScoped(typeof(FileValidationAttribut));
+builder.Services.AddScoped(typeof(UploadService));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -37,6 +40,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 //app.UseExceptionHandler("/error");
+
+
+//app.UseCors(options => options.WithOrigins("http://localhost:3000//").AllowAnyMethod().AllowAnyHeader()); // use Cors
+app.UseCors(options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()); // use Cors
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

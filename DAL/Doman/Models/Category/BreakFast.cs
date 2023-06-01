@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Doman.Models.Category
 {
@@ -11,5 +12,9 @@ namespace DAL.Doman.Models.Category
         public DateTime Create { get; set; }
         public DateTime? Update { get; set; }
         public string? Day { get; set; }
+        public string? ImageName { get; set; }
+
+        //[NotMapped] 
+        //public string ImageUrl { get; set;}
     }
 }
