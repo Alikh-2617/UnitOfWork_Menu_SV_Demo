@@ -3,6 +3,7 @@ using DAL.Doman.Contracts;
 using DAL.Doman.Models.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json.Linq;
 
 namespace MenuAPI.FilterConfiguration.AttributFilters
 {
@@ -27,7 +28,7 @@ namespace MenuAPI.FilterConfiguration.AttributFilters
                 return;
             }
             var input = _context.Set<T>().Find(id);
-            if(input == null)
+            if (input == null)
             {
                 context.Result = new NotFoundResult();
             }
@@ -36,6 +37,9 @@ namespace MenuAPI.FilterConfiguration.AttributFilters
                 context.HttpContext.Items.Add("entity", input);
             }
 
+            //var ss = context.ActionArguments.FirstOrDefault().Value;
+            //context.Result = new BadRequestObjectResult($"{ss} :  ");
+            //return;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

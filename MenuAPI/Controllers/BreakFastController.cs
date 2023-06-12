@@ -75,6 +75,7 @@ namespace MenuAPI.Controllers
         }
 
         [HttpPut]
+        [ServiceFilter(typeof(ValidationActionFilterAttribut<BreakFast>))]
         public async Task<IActionResult> Update(JsonObject breakFast)
         {
             try
